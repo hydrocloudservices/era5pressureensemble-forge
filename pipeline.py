@@ -79,23 +79,22 @@ def save_unique_variable_date_file(dates_vars):
     fetch_era5(chosen_date, variables_long_name, download_filename)
 
     ds = xr.open_mfdataset(download_filename)
-    if all(pd.date_range(chosen_date, periods=24, freq='H') == ds.time.values):
-        if 'expver' in list(ds.dims):
-            ds = ds.reduce(np.nansum, 'expver')
+    if 'expver' in list(ds.dims):
+        ds = ds.reduce(np.nansum, 'expver')
 
-        for var in list(variables):
-            filename = "{:04d}{:02d}{:02d}_{}_ERA5_PL_REANALYSIS.nc".format(chosen_date.year,
-                                                                            chosen_date.month,
-                                                                            chosen_date.day,
-                                                                            var.upper())
+    for var in list(variables):
+        filename = "{:04d}{:02d}{:02d}_{}_ERA5_PL_REANALYSIS.nc".format(chosen_date.year,
+                                                                        chosen_date.month,
+                                                                        chosen_date.day,
+                                                                        var.upper())
 
-            ds[var.lower()].to_netcdf(filename)
-            print(filename)
-            fs.put(filename,
-                   os.path.join(Config.BUCKET,
-                                filename))
-            os.remove(filename)
-    os.remove('tmp.nc')
+        ds[var.lower()].to_netcdf(filename)
+        print(filename)
+        fs.put(filename,
+               os.path.join(Config.BUCKET,
+                            filename))
+        os.remove(filename)
+    os.remove(download_filename)
 
 
 if __name__ == '__main__':
