@@ -83,7 +83,7 @@ def save_unique_variable_date_file(dates_vars):
         ds = ds.reduce(np.nansum, 'expver')
 
     for var in list(variables):
-        filename = "{:04d}{:02d}{:02d}_{}_ERA5_PL_REANALYSIS.nc".format(chosen_date.year,
+        filename = "{:04d}{:02d}{:02d}_{}_ERA5_PL_ENS_REANALYSIS.nc".format(chosen_date.year,
                                                                         chosen_date.month,
                                                                         chosen_date.day,
                                                                         var.upper())
